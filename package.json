@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
-    "@fontsource-variable/oxanium": "^5.2.8",
+    "@fontsource-variable/geist": "^5.2.9",
+    "@fontsource-variable/outfit": "^5.2.8",
     "@tabler/icons-react": "^3.44.0",
     "@tailwindcss/vite": "^4.3.2",
     "@tanstack/react-router": "^1.170.17",
