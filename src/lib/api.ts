@@ -26,6 +26,7 @@ class ApiRequestError extends Error {
   }
 }
 // NOTE: i have created a generic request that use the BASE_URL and path and RequestInit: which are options object  and then use that function to make generic get post put and delete function that just take path 
+
 async function request<T>(
   path: string,
   options: RequestInit = {}

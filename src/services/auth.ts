@@ -16,8 +16,8 @@ export function login(email: string, password: string) {
   return post<AuthResponse>("/api/v1/auth/login", { email, password })
 }
 
-export function register(email: string, password: string) {
-  return post<AuthResponse>("/api/v1/auth/register", { email, password })
+export function register(name: string, email: string, password: string) {
+  return post<AuthResponse>("/api/v1/auth/register", { name, email, password })
 }
 
 export function logout() {

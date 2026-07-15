@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useAuth } from "@/store/auth"
 import { toast } from "sonner"
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/_guest/login")({
   component: LoginComponent,
 })
 
