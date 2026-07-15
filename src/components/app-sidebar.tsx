@@ -12,7 +12,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { IconLayoutDashboard, IconPackage, IconTags, IconAward, IconScale, IconSettings } from "@tabler/icons-react"
+import { IconLayoutDashboard, IconPackage, IconTags, IconAward, IconScale, IconSettings, IconLogout } from "@tabler/icons-react"
+import { useAuth } from "@/store/auth"
 
 const mainNav = [
   { to: "/dashboard", label: "Dashboard", icon: IconLayoutDashboard },
@@ -119,11 +120,15 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              size="sm"
-              render={<Link to="/settings" />}
+              tooltip="Logout"
+              onClick={async () => {
+                const { logout } = useAuth.getState()
+                await logout()
+                window.location.href = "/login"
+              }}
             >
-              <IconSettings />
-              <span>Settings</span>
+              <IconLogout />
+              <span>Logout</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
