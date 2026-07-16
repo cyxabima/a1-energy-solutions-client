@@ -39,8 +39,16 @@ export function getCategoryAncestors(id: string) {
   return get<Category[]>(`/api/v1/categories/${id}/ancestors`)
 }
 
-export function getCategoryInheritedAttributes(id: string) {
-  return get<CategoryAttribute[]>(`/api/v1/categories/${id}/attributes`)
+interface CategoryInheritedAttributesResponse {
+  categoryId: string
+  categoryName: string
+  ancestors: string[]
+  attributes: CategoryAttribute[]
+}
+
+export async function getCategoryInheritedAttributes(id: string) {
+  const data = await get<CategoryInheritedAttributesResponse>(`/api/v1/categories/${id}/attributes`)
+  return data.attributes
 }
 
 export function createCategory(data: {

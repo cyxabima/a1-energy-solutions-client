@@ -23,9 +23,11 @@ interface CategoriesState {
   selectedId: string | null
   selectedCategory: Category | null
   ancestors: Category[]
+  inheritedAttributes: categoryApi.CategoryAttribute[]
   expandedIds: Set<string>
   isLoading: boolean
   isDetailLoading: boolean
+  isInheritedLoading: boolean
 
   fetchTree: () => Promise<void>
   fetchFlat: () => Promise<void>
@@ -36,6 +38,8 @@ interface CategoriesState {
   createCategory: (data: { name: string; parentId?: string | null }) => Promise<void>
   updateCategory: (id: string, data: { name?: string; parentId?: string | null }) => Promise<void>
   deleteCategory: (id: string) => Promise<void>
+  fetchInheritedAttributes: (categoryId: string) => Promise<void>
+  updateAttributes: (categoryId: string, attributes: categoryApi.CategoryAttribute[]) => Promise<void>
 }
 
 export const useCategories = create<CategoriesState>((set, get) => ({
@@ -44,9 +48,11 @@ export const useCategories = create<CategoriesState>((set, get) => ({
   selectedId: null,
   selectedCategory: null,
   ancestors: [],
+  inheritedAttributes: [],
   expandedIds: loadExpanded(),
   isLoading: false,
   isDetailLoading: false,
+  isInheritedLoading: false,
 
   fetchTree: async () => {
     set({ isLoading: true })
@@ -70,16 +76,17 @@ export const useCategories = create<CategoriesState>((set, get) => ({
 
   selectCategory: async (id) => {
     if (!id) {
-      set({ selectedId: null, selectedCategory: null, ancestors: [] })
+      set({ selectedId: null, selectedCategory: null, ancestors: [], inheritedAttributes: [] })
       return
     }
-    set({ selectedId: id, isDetailLoading: true })
+    set({ selectedId: id, isDetailLoading: true, inheritedAttributes: [] })
     try {
-      const [category, ancestors] = await Promise.all([
+      const [category, ancestors, inheritedAttributes] = await Promise.all([
         categoryApi.getCategory(id),
         categoryApi.getCategoryAncestors(id),
+        categoryApi.getCategoryInheritedAttributes(id),
       ])
-      set({ selectedCategory: category, ancestors, isDetailLoading: false })
+      set({ selectedCategory: category, ancestors, inheritedAttributes, isDetailLoading: false })
     } catch {
       set({ isDetailLoading: false })
       throw new Error("Failed to load category")
@@ -139,7 +146,26 @@ export const useCategories = create<CategoriesState>((set, get) => ({
     await get().fetchTree()
     await get().fetchFlat()
     if (selectedId === id) {
-      set({ selectedId: null, selectedCategory: null, ancestors: [] })
+      set({ selectedId: null, selectedCategory: null, ancestors: [], inheritedAttributes: [] })
+    }
+  },
+
+  fetchInheritedAttributes: async (categoryId) => {
+    set({ isInheritedLoading: true })
+    try {
+      const inheritedAttributes = await categoryApi.getCategoryInheritedAttributes(categoryId)
+      set({ inheritedAttributes, isInheritedLoading: false })
+    } catch {
+      set({ isInheritedLoading: false })
+    }
+  },
+
+  updateAttributes: async (categoryId, attributes) => {
+    await categoryApi.updateCategory(categoryId, { attributes })
+    await get().fetchTree()
+    await get().fetchFlat()
+    if (get().selectedId === categoryId) {
+      await get().selectCategory(categoryId)
     }
   },
 }))

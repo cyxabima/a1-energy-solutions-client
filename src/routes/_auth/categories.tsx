@@ -17,6 +17,7 @@ import { useCategories } from "@/store/categories"
 import type { CategoryTreeNode } from "@/services/category"
 import { CategoryForm } from "@/components/category-form"
 import { CategoryDetail } from "@/components/category-detail"
+import { AttributeForm } from "@/components/attribute-form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -180,6 +181,10 @@ function CategoriesPage() {
   const [deleteTarget, setDeleteTarget] = useState<CategoryTreeNode | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
 
+  const [attrFormOpen, setAttrFormOpen] = useState(false)
+  const [attrFormMode, setAttrFormMode] = useState<"add" | "edit">("add")
+  const [editingAttrIndex, setEditingAttrIndex] = useState<number | null>(null)
+
   useEffect(() => {
     Promise.all([fetchTree(), fetchFlat()]).catch(() =>
       toast.error("Failed to load categories")
@@ -237,6 +242,18 @@ function CategoriesPage() {
     } finally {
       setIsDeleting(false)
     }
+  }
+
+  function openAddAttribute() {
+    setAttrFormMode("add")
+    setEditingAttrIndex(null)
+    setAttrFormOpen(true)
+  }
+
+  function openEditAttribute(index: number) {
+    setAttrFormMode("edit")
+    setEditingAttrIndex(index)
+    setAttrFormOpen(true)
   }
 
   return (
@@ -309,7 +326,10 @@ function CategoriesPage() {
         </div>
 
         <div className="flex-1 overflow-y-auto">
-          <CategoryDetail />
+          <CategoryDetail
+            onAddAttribute={openAddAttribute}
+            onEditAttribute={openEditAttribute}
+          />
         </div>
       </div>
 
@@ -321,6 +341,16 @@ function CategoriesPage() {
         defaultParentId={defaultParentId}
         defaultParentName={defaultParentName}
       />
+
+      {selectedId && (
+        <AttributeForm
+          open={attrFormOpen}
+          onOpenChange={setAttrFormOpen}
+          mode={attrFormMode}
+          categoryId={selectedId}
+          attributeIndex={editingAttrIndex ?? undefined}
+        />
+      )}
 
       <AlertDialog
         open={!!deleteTarget}
