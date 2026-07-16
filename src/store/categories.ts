@@ -103,7 +103,7 @@ export const useCategories = create<CategoriesState>((set, get) => ({
       for (const node of nodes) {
         if (node.children.length > 0) {
           ids.add(node._id)
-          walk(node.children)
+          walk(node.children) // simple recursion to expand the childrens of node too
         }
       }
     }
