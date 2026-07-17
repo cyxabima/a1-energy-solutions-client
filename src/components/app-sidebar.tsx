@@ -12,12 +12,13 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { IconLayoutDashboard, IconPackage, IconTags, IconAward, IconScale, IconSettings, IconLogout } from "@tabler/icons-react"
+import { IconLayoutDashboard, IconPackage, IconTags, IconAward, IconScale, IconSettings, IconLogout, IconShoppingCart, IconUsers } from "@tabler/icons-react"
 import { useAuth } from "@/store/auth"
 
 const mainNav = [
   { to: "/dashboard", label: "Dashboard", icon: IconLayoutDashboard },
   { to: "/inventory", label: "Inventory", icon: IconPackage },
+  { to: "/products", label: "Products", icon: IconShoppingCart },
 ]
 
 const catalogNav = [
@@ -27,6 +28,7 @@ const catalogNav = [
 ]
 
 const systemNav = [
+  { to: "/users", label: "Users", icon: IconUsers },
   { to: "/settings", label: "Settings", icon: IconSettings },
 ]
 
