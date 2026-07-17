@@ -14,8 +14,10 @@ import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GuestRegisterRouteImport } from './routes/_guest/register'
 import { Route as GuestLoginRouteImport } from './routes/_guest/login'
+import { Route as AuthUsersRouteImport } from './routes/_auth/users'
 import { Route as AuthUnitsRouteImport } from './routes/_auth/units'
 import { Route as AuthSettingsRouteImport } from './routes/_auth/settings'
+import { Route as AuthProductsRouteImport } from './routes/_auth/products'
 import { Route as AuthInventoryRouteImport } from './routes/_auth/inventory'
 import { Route as AuthDashboardRouteImport } from './routes/_auth/dashboard'
 import { Route as AuthCategoriesRouteImport } from './routes/_auth/categories'
@@ -44,6 +46,11 @@ const GuestLoginRoute = GuestLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => GuestRoute,
 } as any)
+const AuthUsersRoute = AuthUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthUnitsRoute = AuthUnitsRouteImport.update({
   id: '/units',
   path: '/units',
@@ -52,6 +59,11 @@ const AuthUnitsRoute = AuthUnitsRouteImport.update({
 const AuthSettingsRoute = AuthSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthProductsRoute = AuthProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
   getParentRoute: () => AuthRoute,
 } as any)
 const AuthInventoryRoute = AuthInventoryRouteImport.update({
@@ -81,8 +93,10 @@ export interface FileRoutesByFullPath {
   '/categories': typeof AuthCategoriesRoute
   '/dashboard': typeof AuthDashboardRoute
   '/inventory': typeof AuthInventoryRoute
+  '/products': typeof AuthProductsRoute
   '/settings': typeof AuthSettingsRoute
   '/units': typeof AuthUnitsRoute
+  '/users': typeof AuthUsersRoute
   '/login': typeof GuestLoginRoute
   '/register': typeof GuestRegisterRoute
 }
@@ -92,8 +106,10 @@ export interface FileRoutesByTo {
   '/categories': typeof AuthCategoriesRoute
   '/dashboard': typeof AuthDashboardRoute
   '/inventory': typeof AuthInventoryRoute
+  '/products': typeof AuthProductsRoute
   '/settings': typeof AuthSettingsRoute
   '/units': typeof AuthUnitsRoute
+  '/users': typeof AuthUsersRoute
   '/login': typeof GuestLoginRoute
   '/register': typeof GuestRegisterRoute
 }
@@ -106,8 +122,10 @@ export interface FileRoutesById {
   '/_auth/categories': typeof AuthCategoriesRoute
   '/_auth/dashboard': typeof AuthDashboardRoute
   '/_auth/inventory': typeof AuthInventoryRoute
+  '/_auth/products': typeof AuthProductsRoute
   '/_auth/settings': typeof AuthSettingsRoute
   '/_auth/units': typeof AuthUnitsRoute
+  '/_auth/users': typeof AuthUsersRoute
   '/_guest/login': typeof GuestLoginRoute
   '/_guest/register': typeof GuestRegisterRoute
 }
@@ -119,8 +137,10 @@ export interface FileRouteTypes {
     | '/categories'
     | '/dashboard'
     | '/inventory'
+    | '/products'
     | '/settings'
     | '/units'
+    | '/users'
     | '/login'
     | '/register'
   fileRoutesByTo: FileRoutesByTo
@@ -130,8 +150,10 @@ export interface FileRouteTypes {
     | '/categories'
     | '/dashboard'
     | '/inventory'
+    | '/products'
     | '/settings'
     | '/units'
+    | '/users'
     | '/login'
     | '/register'
   id:
@@ -143,8 +165,10 @@ export interface FileRouteTypes {
     | '/_auth/categories'
     | '/_auth/dashboard'
     | '/_auth/inventory'
+    | '/_auth/products'
     | '/_auth/settings'
     | '/_auth/units'
+    | '/_auth/users'
     | '/_guest/login'
     | '/_guest/register'
   fileRoutesById: FileRoutesById
@@ -192,6 +216,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuestLoginRouteImport
       parentRoute: typeof GuestRoute
     }
+    '/_auth/users': {
+      id: '/_auth/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof AuthUsersRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_auth/units': {
       id: '/_auth/units'
       path: '/units'
@@ -204,6 +235,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof AuthSettingsRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/products': {
+      id: '/_auth/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof AuthProductsRouteImport
       parentRoute: typeof AuthRoute
     }
     '/_auth/inventory': {
@@ -242,8 +280,10 @@ interface AuthRouteChildren {
   AuthCategoriesRoute: typeof AuthCategoriesRoute
   AuthDashboardRoute: typeof AuthDashboardRoute
   AuthInventoryRoute: typeof AuthInventoryRoute
+  AuthProductsRoute: typeof AuthProductsRoute
   AuthSettingsRoute: typeof AuthSettingsRoute
   AuthUnitsRoute: typeof AuthUnitsRoute
+  AuthUsersRoute: typeof AuthUsersRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
@@ -251,8 +291,10 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthCategoriesRoute: AuthCategoriesRoute,
   AuthDashboardRoute: AuthDashboardRoute,
   AuthInventoryRoute: AuthInventoryRoute,
+  AuthProductsRoute: AuthProductsRoute,
   AuthSettingsRoute: AuthSettingsRoute,
   AuthUnitsRoute: AuthUnitsRoute,
+  AuthUsersRoute: AuthUsersRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
